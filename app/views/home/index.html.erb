@@ -1,0 +1,87 @@
+<div class="flex flex-col w-full">
+
+
+  <!-- Filter Section with white background -->
+  <section class="py-24 bg-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      
+      <!-- Title and Filters in a single row -->
+      <div class="flex justify-between items-center flex-row mb-8">
+        
+        <!-- New Arrivals Title -->
+        <h2 class="font-manrope font-bold text-4xl text-black max-xl:text-center flex-shrink-0 w-1/2 sm:w-auto">
+          New Arrivals
+        </h2>
+
+        <!-- Filters Form (Category, Price, Discount, Apply Button) -->
+        <%= form_tag(root_path, method: :get, class: 'flex items-center w-full sm:w-auto justify-center m-1') do %>
+
+          <!-- Category Filter -->
+          <div class="relative w-full sm:w-auto">
+            <label for="category" class="font-medium text-gray-700"></label>
+            <%= select_tag :category, options_for_select([['All Categories', '']] + @categories.map { |c| [c.name, c.id] }, params[:category]), class: "mt-1 px-3 py-2 pr-8 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:w-auto appearance-none" %>
+          </div>
+
+          <!-- Price Filter -->
+          <div class="relative w-full sm:w-auto">
+            <label for="price" class="font-medium text-gray-700"></label>
+            <%= select_tag :price, options_for_select([['All Prices', ''], ['Under $50', 'under_50'], ['$50 - $100', '50_100'], ['$100+', '100+']], params[:price]), class: "mt-1 px-3 py-2 pr-8 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:w-auto appearance-none" %>
+          </div>
+
+          <!-- Discount Filter -->
+          <div class="relative w-full sm:w-auto">
+            <label for="discount" class="font-medium text-gray-700"></label>
+            <%= select_tag :discount, options_for_select([['All Discounts', ''], ['10% Off or More', '10'], ['20% Off or More', '20'], ['30% Off or More', '30'], ['50% Off or More', '50']], params[:discount]), class: "mt-1 px-3 py-2 pr-8 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full sm:w-auto appearance-none" %>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="w-full sm:w-auto">
+            <%= submit_tag 'Apply Filters', class: 'bg-indigo-600 text-white px-4 py-2 rounded-md w-full sm:w-auto' %>
+          </div>
+
+        <% end %>
+      </div>
+
+      <!-- Product List as a flex container with wrapping -->
+      <div class="flex flex-wrap gap-8 justify-start">
+        <% @products.each do |product| %>
+          <div class="max-w-[384px] mx-auto flex-shrink-0">
+            <div class="relative w-full max-w-sm aspect-square">
+              <% if product.image.attached? %>
+                <%= image_tag product.image, class: "w-full h-full rounded-xl object-cover" %>
+              <% else %>
+                <p>No image available for this product.</p>
+              <% end %>
+              <% if product.discount.present? %> 
+                <span class="py-1 min-[400px]:py-2 px-2 min-[400px]:px-4 cursor-pointer rounded-lg bg-gradient-to-tr from-indigo-600 to-purple-600 font-medium text-base leading-7 text-white absolute top-3 right-3 z-10">
+                  <%= product.discount %> % Off
+                </span>
+              <% end %> 
+            </div>
+
+            <!-- Product Details -->
+            <div class="mt-5 flex items-center justify-between">
+              <div class="">
+                <%= link_to product.name, product_path(product) %>
+                <%# <h6 class="font-medium text-xl leading-8 text-black mb-2 truncate"><%= product.name %></h6> 
+                <h6 class="font-semibold text-xl leading-8 text-indigo-600"><%= number_to_currency(product.price) %></h6>
+              </div>
+              <button class="p-2 min-[400px]:p-4 rounded-full bg-white border border-gray-300 flex items-center justify-center group shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-400 hover:bg-gray-50">
+                <svg class="stroke-gray-900 transition-all duration-500 group-hover:stroke-black" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
+                  <path d="M12.6892 21.125C12.6892 22.0225 11.9409 22.75 11.0177 22.75C10.0946 22.75 9.34632 22.0225 9.34632 21.125M19.3749 21.125C19.3749 22.0225 18.6266 22.75 17.7035 22.75C16.7804 22.75 16.032 22.0225 16.032 21.125M4.88917 6.5L6.4566 14.88C6.77298 16.5715 6.93117 17.4173 7.53301 17.917C8.13484 18.4167 8.99525 18.4167 10.7161 18.4167H18.0056C19.7266 18.4167 20.587 18.4167 21.1889 17.9169C21.7907 17.4172 21.9489 16.5714 22.2652 14.8798L22.8728 11.6298C23.3172 9.25332 23.5394 8.06508 22.8896 7.28254C22.2398 6.5 21.031 6.5 18.6133 6.5H4.88917ZM4.88917 6.5L4.33203 3.25" stroke="" stroke-width="1.6" stroke-linecap="round" />
+                </svg>
+              </button>
+            </div>
+            
+          </div>
+          
+        <% end %>
+      </div>
+    </div>
+  </section>
+<div class="pagination mx-auto flex justify-center my-4">
+  <%= paginate @products, theme: '' %>
+</div>
+
+
+</div>

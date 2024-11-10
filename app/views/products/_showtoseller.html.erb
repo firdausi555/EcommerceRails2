@@ -1,0 +1,62 @@
+<div id="<%= dom_id(product) %>" class="bg-white rounded-2xl p-5 cursor-pointer hover:-translate-y-2 transition-all relative w-full" >
+
+  <!-- Favorite Icon -->
+  <div class="bg-gray-100 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer absolute top-4 right-4">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16px" class="fill-gray-800 inline-block" viewBox="0 0 64 64">
+      <path d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z"></path>
+    </svg>
+  </div>
+
+  <!-- Product Image (using Rails image_tag with ActiveStorage) -->
+  <div class="w-full h-[180px] overflow-hidden mx-auto mb-4">
+    <% if product.image.attached? %>  <!-- Check if the product has an attached image -->
+      <%= image_tag product.image, alt: product.name, class: "w-full h-full object-contain" %>
+    <% else %>  <!-- Default image if no image is attached -->
+      <%= image_tag 'default-product-image.jpg', alt: 'Default product image', class: "w-full h-full object-contain" %>
+    <% end %>
+  </div>
+
+  <!-- Product Information -->
+  <div class="p-4">
+    <h3 class="text-lg font-extrabold text-gray-800"><%= product.name %></h3>
+    <p class="text-gray-600 text-sm mt-2"><%= product.description %></p>
+    <h4 class="text-lg text-gray-800 font-bold mt-4">$<%= product.price %></h4>
+  </div>
+
+  <!-- Product Details -->
+  <div class="mt-4 p-4 border-t border-gray-200">
+    <p class="my-5">
+      <strong class="block font-medium mb-1">Quantity:</strong>
+      <%= product.quantity %>
+    </p>
+
+    <p class="my-5">
+      <strong class="block font-medium mb-1">Size:</strong>
+      <%= product.size %>
+    </p>
+
+    <p class="my-5">
+      <strong class="block font-medium mb-1">Discount:</strong>
+      <% if product.discount.present? %>
+        <%= product.discount %>%
+      <% else %>
+        0.00%
+      <% end %>
+    </p>
+
+    <p class="my-5">
+      <strong class="block font-medium mb-1">Colour:</strong>
+      <%= product.colour %>
+    </p>
+
+    <p class="my-5">
+      <strong class="block font-medium mb-1">User:</strong>
+      <%= product.user_id %>
+    </p>
+
+    <p class="my-5">
+      <strong class="block font-medium mb-1">Category:</strong>
+      <%= product.category_id %>
+    </p>
+  </div>
+</div>
